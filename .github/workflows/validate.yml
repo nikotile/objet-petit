@@ -1,14 +1,14 @@
-name: Update
+name: Validation
 
 on:
-  push:
-    branches: [ main ]
+  pull_request:
+    branches: [ "main" ]
     paths:
       - "**.yaml"
   workflow_dispatch:
 
 jobs:
-  parse:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -21,22 +21,11 @@ jobs:
             echo "Checking file: $f"
             out="${f:13}"
             content=$(cat $f | jc --yaml -p | head -n -1 | tail -n +2 | sed "s/^\s\s//")
-            [ ! -z "$content" ] && echo "OK" || exit 1
+            [ ! -z "$content" ] echo "OK" || exit 1
           done
       - name: Fail
         if: ${{ failure() }}
         run: echo "Error" ; exit 1
       - name: Pass
         if: ${{ success() }}
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.host }}
-          username: ${{ secrets.user }}
-          key: ${{ secrets.ssh }}
-          port: ${{ secrets.port }}
-          passphrase: ${{ secrets.passphrase }}
-          script: |
-            cd ~/git/objet-petit
-            git stash
-            git pull --force origin main
-            bash update.sh
+        run: echo "Valid"
