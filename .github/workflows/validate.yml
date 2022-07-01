@@ -13,7 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install dependency
-        run: wget ${{ secrets.jc_url }} -nv -O jc.deb && sudo dpkg -i jc.deb
+        run: |
+          jc_url=https://github.com/kellyjonbrazil/jc/releases/download/v1.20.1/jc_1.20.1-1_amd64.deb
+          wget $jc_url -nv -O jc.deb && sudo dpkg -i jc.deb
       - name: Check
         run: |
           [ ! -d entries/json ] && mkdir entries/json
