@@ -1,0 +1,24 @@
+name: Update
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  parse:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Parse data
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.host }}
+        username: ${{ secrets.user }}
+        key: ${{ secrets.ssh }}
+        port: ${{ secrets.port }}
+        passphrase: ${{ secrets.passphrase }}
+        script: |
+          cd ~/git/objet-petit
+          git stash
+          git pull --force origin main
+          ./update.sh
