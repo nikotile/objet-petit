@@ -21,4 +21,4 @@ jobs:
           cd ~/git/objet-petit
           git stash
           git pull --force origin main
-          ./update.sh
+          bash update.sh
