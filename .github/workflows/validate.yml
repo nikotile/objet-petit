@@ -46,8 +46,8 @@ jobs:
       - name: Merge pull request
         if: steps.acces.outputs.has-permission
         uses: alexwilson/enable-github-automerge-action@main
-          with:
-            github-token: ${{ secrets.PAT }}
+        with:
+          github-token: ${{ secrets.PAT }}
       - name: Skip merge
         if: "! steps.access.outputs.has-permission"
         run: exit 0
