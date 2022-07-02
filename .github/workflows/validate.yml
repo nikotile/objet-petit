@@ -31,3 +31,23 @@ jobs:
       - name: Pass
         if: ${{ success() }}
         run: echo "Valid"
+  automerge:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v0.3
+      - name: Check if user has write access
+        id: access
+        uses: scherermichael-oss/action-has-permission@master
+        with:
+          permission: write
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+      - name: Merge pull request
+        if: steps.acces.outputs.has-permission
+        uses: alexwilson/enable-github-automerge-action@main
+          with:
+            github-token: ${{ secrets.PAT }}
+      - name: Skip merge
+        if: "! steps.access.outputs.has-permission"
+        run: exit 0
