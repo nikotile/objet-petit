@@ -23,7 +23,7 @@ jobs:
             echo "Checking file: $f"
             out="${f:13}"
             content=$(cat $f | jc --yaml -p | head -n -1 | tail -n +2 | sed "s/^\s\s//")
-            [ ! -z "$content" ] echo "OK" || exit 1
+            [ ! -z "$content" ] && echo "OK" || exit 1
           done
       - name: Fail
         if: ${{ failure() }}
